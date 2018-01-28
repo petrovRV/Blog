@@ -70,11 +70,9 @@ class PostViewController: UIViewController {
                 self.model.sendComment()
                 
                 self.model.statusSendMessage
-                    .subscribe(onNext: {
-                        if $0.status == 200 {
+                    .subscribe(onNext: { _ in
                             self.commentTextView.text = nil
                             self.tablePost.reloadData()
-                        }
                     }).disposed(by: self.disposeBag)
                 
             })

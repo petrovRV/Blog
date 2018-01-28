@@ -9,5 +9,4 @@
 import Foundation
 
 struct Result: Codable {
-    var status: Int
 }

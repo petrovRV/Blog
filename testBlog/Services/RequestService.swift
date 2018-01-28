@@ -19,7 +19,7 @@ class RequestService {
     
     enum UrlLink {
 
-        case posts, comments, marks
+        case posts, comments, marks, login
         
         func getUrlLink(urlParameter: String = "", urlParameter2: String = "") -> String {
             switch self {
@@ -29,6 +29,8 @@ class RequestService {
                 return "comments/\(urlParameter)\(urlParameter2)"
             case .marks:
                 return "marks/"
+            case .login:
+                return "security/login"
             }
         }
     }
@@ -69,9 +71,23 @@ class RequestService {
     
     func sendComment(with param: [String: Any]) -> Observable<Result> {
         if network.isInternetAvailable() {
+            _ = login()
             let url = domain + UrlLink.comments.getUrlLink()
-            return network.getObject(method: .post, url: url, parameters: param, encoding: JSONEncoding.default, heder: nil, type: Result.self)
+            return network.getObject(method: .post, url: url, parameters: param, encoding: JSONEncoding.default, heder: ["Content-Type": "application/json"], type: Result.self)
           
+        } else {
+            return Observable.empty()
+        }
+    }
+    
+    func login() -> Observable<Result> {
+        if network.isInternetAvailable() {
+            let param: [String : Any] = [
+                "name": "dogma",
+                "password": "123123"
+            ]
+            let url = domain + UrlLink.login.getUrlLink()
+            return network.getObject(method: .post, url: url, parameters: param, encoding: JSONEncoding.default, heder: ["Content-Type": "application/json"], type: Result.self)
         } else {
             return Observable.empty()
         }

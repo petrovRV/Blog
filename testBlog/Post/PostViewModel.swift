@@ -41,7 +41,13 @@ class PostViewModel {
     }
     
     func sendComment() {
-        let param = ["comment": commentText]
+        
+        let param: [String : Any] = [
+            "text": commentText,
+            "idPost": 21,
+            "idUser": 191
+            ]
+        
         statusSendMessage = request.sendComment(with: param)
     }
     
